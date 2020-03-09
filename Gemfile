@@ -19,6 +19,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'jwt'
 
+gem 'pundit'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -44,7 +46,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-group :test do 
+group :test do
   gem 'factory_bot_rails'
   gem 'shoulda-matchers'
   gem 'faker'
