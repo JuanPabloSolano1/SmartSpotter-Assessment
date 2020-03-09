@@ -19,6 +19,14 @@ end
 user = User.new(name: 'david', password: 'Hello', password_confirmation: 'Hello',email:"juansolano1034@evil-corp.com")
 user.save!
 
+
+user = User.new(name: 'pedro', password: 'Hello', password_confirmation: 'Hello',email:"juansolano1039@evil-corp.com")
+user.save!
+
+# user = User.new(name: 'pedro', password: 'Hello', password_confirmation: 'Hello',email:"juansolano1039@evil-cor.com")
+# user.save!
+
+
 puts "User Created"
 
 booking = Booking.new(
@@ -29,6 +37,25 @@ booking = Booking.new(
   user_id: 1
 )
 booking.save!
+
+booking = Booking.new(
+  start_time: "14:30",
+  end_time: "14:45",
+  date: "12/09/2020",
+  room_id: 1,
+  user_id: 2
+)
+booking.save!
+
+booking = Booking.new(
+  start_time: "14:46",
+  end_time: "14:47",
+  date: "12/09/2020",
+  room_id: 1,
+  user_id: 2
+)
+booking.save!
+
 
 puts "Booking Created"
 

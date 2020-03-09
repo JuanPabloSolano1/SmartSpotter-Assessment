@@ -27,7 +27,7 @@ class Booking < ApplicationRecord
     .where.not(id: id)
     .where(room_id: room_id)
     .where(date: date)
-    .where('start_time < ? AND end_time > ?', end_time, start_time)
+    .where('start_time <= ? AND end_time >= ?', end_time, start_time)
     .none?
 
     errors.add(:base, 'The selected room is booked in the specified dates')
