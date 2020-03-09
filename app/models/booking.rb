@@ -6,6 +6,8 @@ class Booking < ApplicationRecord
   belongs_to :room
   validates :start_time, :end_time, presence: true
   validate :time_validation?
+  validate :Bookings_overlap?
+
 
   private
 
@@ -19,4 +21,15 @@ class Booking < ApplicationRecord
     end
   end
 
+  def Bookings_overlap?
+    return if self
+    .class
+    .where.not(id: id)
+    .where(room_id: room_id)
+    .where(date: date)
+    .where('start_time < ? AND end_time > ?', end_time, start_time)
+    .none?
+
+    errors.add(:base, 'The selected room is booked in the specified dates')
+  end
 end
