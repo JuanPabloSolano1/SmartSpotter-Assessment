@@ -3,10 +3,8 @@
 class User < ApplicationRecord
   has_secure_password
 
-  # write your code here
-
   has_many :bookings, dependent: :destroy
   validates_presence_of :name, :email, :password, :password_digest
-
-  # write your code here
+  validates :email, uniqueness: true
+  validates_format_of :email,:with => /.{0,20}@evil-corp.com/
 end
