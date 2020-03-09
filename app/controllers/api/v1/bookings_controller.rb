@@ -8,31 +8,66 @@ module Api
       include ExceptionHandler
 
       def index
-        bookings = Booking.all
-        json_response(bookings)
+        if params[:room_id].present?
+          @bookings = Booking.where(room_id: params[:room_id])
+          @bookings.sort_by {|t| t.id}
+          json_response(@bookings)
+        else
+          @bookings = Booking.all
+          json_response(@bookings)
+        end
       end
 
       def show
-        # Write your code here
+        if params[:room_id].present?
+          @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
+          authorize @booking
+          json_response(@booking)
+        else
+          @booking = Booking.find_by(id: params[:id])
+          authorize @booking
+          json_response(@booking)
+        end
       end
 
       def create
-        # Write your code here
+        @booking = Booking.new(booking_params)
+        @booking.user = current_user
+
+        if @booking.save!
+          authorize @booking
+          json_response(@booking)
+        end
       end
 
       def update
-        # Write your code here
+        @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
+        @booking.update_attributes(booking_params)
+        authorize @booking
+        json_response(@booking)
       end
 
       def destroy
-        # Write your code here
+        if params[:room_id].present?
+          @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
+          authorize @booking
+          @booking.destroy!
+        else
+          @booking = Booking.find_by(id: params[:id])
+          authorize @booking
+          @booking.destroy!
+        end
       end
 
       private
 
       def booking_params
-        params.permit
-        # Write your code here
+        params.permit(
+          :start_time,
+          :end_time,
+          :date,
+          :room_id
+          )
       end
     end
   end
