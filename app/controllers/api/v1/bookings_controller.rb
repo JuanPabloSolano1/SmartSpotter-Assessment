@@ -10,10 +10,21 @@ module Api
       def index
         if params[:room_id].present?
           @bookings = Booking.where(room_id: params[:room_id])
-          @bookings.sort_by {|t| t.id}
+          @bookings.each do |booking|
+            @data = []
+            @participants = Participant.where(booking_id: booking.id).count
+            booking.participant_count = @participants
+            @data.push(booking)
+          end
           json_response(@bookings)
         else
           @bookings = Booking.all
+          @bookings.each do |booking|
+            @data = []
+            @participants = Participant.where(booking_id: booking.id).count
+            booking.participant_count = @participants
+            @data.push(booking)
+          end
           json_response(@bookings)
         end
       end
@@ -21,12 +32,14 @@ module Api
       def show
         if params[:room_id].present?
           @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
-          # @participants = Participant.where(booking_id: params[:id])
-          # @booking.participants = @participants
+          @participants = Participant.where(booking_id: params[:id]).count
+          @booking.participant_count = @participants
           authorize @booking
           json_response(@booking)
         else
           @booking = Booking.find_by(id: params[:id])
+          @participants = Participant.where(booking_id: params[:id]).count
+          @booking.participant_count = @participants
           authorize @booking
           json_response(@booking)
         end
@@ -35,6 +48,8 @@ module Api
       def create
         @booking = Booking.new(booking_params)
         @booking.user = current_user
+        @participants = Participant.where(booking_id: @booking.id).count
+        @booking.participant_count = @participants
 
         if @booking.save!
           authorize @booking
@@ -68,8 +83,9 @@ module Api
           :start_time,
           :end_time,
           :date,
-          :room_id
-          )
+          :room_id,
+          :participant_count
+        )
         # Write your code here
       end
     end
