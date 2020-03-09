@@ -21,6 +21,8 @@ module Api
       def show
         if params[:room_id].present?
           @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
+          # @participants = Participant.where(booking_id: params[:id])
+          # @booking.participants = @participants
           authorize @booking
           json_response(@booking)
         else
