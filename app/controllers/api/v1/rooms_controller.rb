@@ -12,7 +12,6 @@ module Api
 
       def show
         @room = Room.find(params[:id])
-        authorize @room
         json_response(@room)
       end
     end

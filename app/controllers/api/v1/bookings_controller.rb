@@ -21,11 +21,9 @@ module Api
       def show
         if params[:room_id].present?
           @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
-          authorize @booking
           json_response(@booking)
         else
           @booking = Booking.find_by(id: params[:id])
-          authorize @booking
           json_response(@booking)
         end
       end
@@ -35,7 +33,6 @@ module Api
         @booking.user = current_user
 
         if @booking.save!
-          authorize @booking
           json_response(@booking)
         end
       end
@@ -43,18 +40,15 @@ module Api
       def update
         @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
         @booking.update_attributes(booking_params)
-        authorize @booking
         json_response(@booking)
       end
 
       def destroy
         if params[:room_id].present?
           @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
-          authorize @booking
           @booking.destroy!
         else
           @booking = Booking.find_by(id: params[:id])
-          authorize @booking
           @booking.destroy!
         end
       end
