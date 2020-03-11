@@ -61,10 +61,10 @@ module Api
         @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
         @participants = Participant.where(booking_id: params[:id]).count
         @booking.participant_count = @participants
-          if @booking.update_attributes!(booking_params)
-             authorize @booking
-             json_response(@booking)
-          end
+        if @booking.update_attributes!(booking_params)
+          authorize @booking
+          json_response(@booking)
+        end
       end
 
       def destroy
@@ -89,7 +89,7 @@ module Api
           :room_id,
           :participant_count
         )
-        # Write your code here
+
       end
     end
   end
