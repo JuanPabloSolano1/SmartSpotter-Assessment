@@ -16,7 +16,7 @@ module Api
             booking.participant_count = @participants
             @data.push(booking)
           end
-          json_response(@bookings)
+          json_response(@bookings.sort_by{|booking| booking.id})
         else
           @bookings = Booking.all
           @bookings.each do |booking|
@@ -25,7 +25,7 @@ module Api
             booking.participant_count = @participants
             @data.push(booking)
           end
-          json_response(@bookings)
+          json_response(@bookings.sort_by{|booking| booking.id})
         end
       end
 
@@ -59,9 +59,12 @@ module Api
 
       def update
         @booking = Booking.find_by(room_id: params[:room_id],id: params[:id])
-        @booking.update_attributes(booking_params)
-        authorize @booking
-        json_response(@booking)
+        @participants = Participant.where(booking_id: params[:id]).count
+        @booking.participant_count = @participants
+          if @booking.update_attributes!(booking_params)
+             authorize @booking
+             json_response(@booking)
+          end
       end
 
       def destroy
