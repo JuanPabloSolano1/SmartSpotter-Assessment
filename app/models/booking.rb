@@ -17,7 +17,7 @@ class Booking < ApplicationRecord
 
   def time_validation?
     if start_time >= end_time
-      errors.add(:end_date, "must be after the start time")
+      errors.add(:end_date, "end time should be after the start time")
     end
   end
 
@@ -30,6 +30,6 @@ class Booking < ApplicationRecord
     .where('start_time <= ? AND end_time >= ?', end_time, start_time)
     .none?
 
-    errors.add(:base, 'The selected room is booked in the specified dates')
+    errors.add(:base, 'The selected room is booked in the specified times')
   end
 end
